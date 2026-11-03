@@ -1,0 +1,113 @@
+---
+title: "21 - Data Processing"
+output: html_document
+---
+
+## Purpose
+
+This file loads the clean data, adds new variables, compares deaths during
+the pandemic with 2019, and saves the result as `22_DataSaving.RData`.
+
+## 1. Load our functions and the clean data
+
+We load our processing functions and the clean data from the last file.
+
+```{r load}
+source("02_funct_DataProcessing.R")
+load("12_DataSaving.RData")
+dim(df_clean)
+```
+
+The clean data has 3,600 rows and 20 columns, as expected.
+
+## 2. Add new variables
+
+We add five new variables:
+
+- `unnatural`: deaths not from natural causes (like injuries), which is all
+  deaths minus natural deaths
+- `neuro_total`: Alzheimer's disease plus stroke deaths
+- `other_natural`: natural deaths not in any of the listed causes
+- `period`: "Pre-pandemic" (before March 2020) or "Pandemic"
+- `time_index`: the month number, from 1 (January 2019) to 30 (June 2021)
+
+```{r derive}
+df_proc <- add_derived_variables(df_clean)
+table(df_proc$period)
+summary(df_proc$other_natural)
+```
+
+There are 1,680 pre-pandemic rows (14 months) and 1,920 pandemic rows (16
+months). The smallest value of `other_natural` is 0, so it is never negative,
+which is what we expect.
+
+## 3. Change in deaths from 2019 to 2020
+
+The data does not include population sizes, so we cannot find death rates.
+Instead, we compare the number of deaths in 2020 with 2019. We leave out
+COVID-19 here because it had no deaths in 2019.
+
+```{r overall}
+causes_compared <- c("all_cause", "unnatural", "neuro_total",
+                     cause_cols[cause_cols != "covid_underlying"])
+overall <- percent_change_table(df_proc, causes_compared)
+sort(overall[1, ], decreasing = TRUE)
+```
+
+Total deaths went up 18.8% in 2020. Among the causes, diabetes (16.7%),
+unnatural deaths (13.6%) and Alzheimer's disease (10.5%) went up the most. Chronic lower respiratory
+disease is the only cause that went down (-2.7%).
+
+## 4. Change by race/ethnicity
+
+We compare each race/ethnicity group with its own deaths in 2019. This way,
+the size of each group does not matter.
+
+```{r by_race}
+percent_change(df_proc, "all_cause", group_var = "race_ethnicity")
+percent_change_table(df_proc, c("all_cause", "alzheimer", "stroke"),
+                     group_var = "race_ethnicity")
+```
+
+Deaths went up 44.8% for Hispanic people but 13.9% for White people. Every
+other group went up between 26% and 37%. Alzheimer's and stroke deaths show
+the same pattern: White people had the smallest increase.
+
+## 5. Change by age group
+
+We compare total deaths and unnatural deaths for each age group.
+
+```{r by_age}
+percent_change_table(df_proc, c("all_cause", "unnatural"),
+                     group_var = "age_group")
+```
+
+For ages 15 to 44, total deaths went up about 21% to 27%, and unnatural
+deaths went up about 23%. For ages 75 and over, unnatural deaths went
+up less than 3%. So younger adults had a large increase in deaths that were
+not natural.
+
+## 6. Change in 2021
+
+Our 2021 data only covers January to June, so we compare it with January to
+June of 2019.
+
+```{r year_2021}
+percent_change(df_proc, "all_cause", group_var = "race_ethnicity",
+               year = 2021, max_month = 6)
+```
+
+The gap grew in early 2021. Deaths went up 50.7% for Hispanic people but
+10.4% for White people.
+
+## 7. Save the processed data
+
+We save the processed data so the visualization file can use it.
+
+```{r save}
+save(df_proc, cause_cols, file = "22_DataSaving.RData")
+dim(df_proc)
+```
+
+The processed data has 3,600 rows and 25 columns. It is saved as
+`22_DataSaving.RData`.
