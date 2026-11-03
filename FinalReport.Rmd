@@ -1,0 +1,25 @@
+---
+title: "Excess Deaths in the U.S. During the COVID-19 Pandemic: Differences by Race/Ethnicity, Age, and Sex"
+author: "Julian Methippara, Jonathan Methippara, Jonathan Waddell"
+output: pdf_document
+---
+
+# Abstract
+
+# Introduction
+
+The COVID-19 pandemic changed how many people died in the United States. Many people died from COVID-19 itself, but the pandemic may also have caused more deaths from other causes. For example, some people may have delayed medical care, and others faced more stress and isolation. If we only look at COVID-19 deaths, we could miss these effects.
+
+In this project, we do not study COVID-19 deaths directly. Instead, we compare the number of deaths during the pandemic with the same months of 2019, before the pandemic started. The increase in deaths is called excess deaths. We also look at which causes of death went up, such as Alzheimer's disease and stroke.
+
+The main question that we are focusing on is: compared with the same months of 2019, how much did U.S. deaths go up during the COVID-19 pandemic, and was the increase different across race/ethnicity groups? We also compare groups by age and sex.
+
+Our goal is to test whether the increase in deaths was different across these groups. If some groups had much larger increases than others, this could help public health officials and doctors decide where to focus their efforts in future health emergencies. It can also help researchers understand the effects of the pandemic beyond COVID-19 deaths alone.
+
+# Executive Summary
+
+# Data
+
+# Visualization
+
+# Analysis
