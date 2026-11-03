@@ -1,0 +1,160 @@
+---
+title: "11 - Data Cleaning"
+output: html_document
+---
+
+## Purpose
+
+This file loads the raw CDC data, fixes its problems, and saves the clean data as `12_DataSaving.RData`.
+
+## 1. Load our functions
+
+We load our cleaning functions from `01_funct_DataCleaning.R`.
+
+```{r load}
+source("01_funct_DataCleaning.R")
+```
+
+## 2. Read the data
+
+We read the data and check its size.
+
+```{r read}
+raw <- read.csv("data/cdc_monthly_mortality.csv")
+dim(raw)
+```
+
+The data has 3,960 rows and 24 columns. Each row gives the number of deaths in one month for one group of people (by sex, race/ethnicity and age).
+
+## 3. Rename columns
+
+We look at a few of the column names.
+
+```{r names_before}
+colnames(raw)[c(12, 15, 22)]
+```
+
+These names are very long, so we give all columns short names.
+
+```{r rename}
+df <- rename_columns(raw)
+colnames(df)
+```
+
+## 4. Change death counts to numbers
+
+We check how R read the death count columns.
+
+```{r counts_before}
+count_cols <- colnames(df)[10:24]
+str(df[, count_cols[1:4]])
+```
+
+Most of these columns are text (`chr`) instead of numbers, because numbers above 999 have commas (like `"1,355"`). We remove the commas and change these columns to numbers.
+
+```{r counts_after}
+df <- clean_counts(df, count_cols)
+str(df[, count_cols[1:4]])
+```
+
+Now all of these columns are numbers (`num`).
+
+## 5. Fix the sex column
+
+We look at how sex is written in each year.
+
+```{r sex_before}
+table(df$sex, df$year)
+```
+
+In 2019, sex is written as `M` and `F`. In 2020 and 2021, it is written as `Male` and `Female`. We change `M` and `F` to `Male` and `Female` so all years match.
+
+```{r sex_after}
+df <- recode_sex(df)
+table(df$sex, df$year)
+```
+
+Now every year uses `Female` and `Male`.
+
+## 6. Change categories to factors
+
+Race/ethnicity and age group are categories, so we make them factors. We make age group an ordered factor so it goes from youngest to oldest.
+
+```{r factors}
+df <- set_factors(df)
+levels(df$race_ethnicity)
+levels(df$age_group)
+```
+
+There are 6 race/ethnicity groups and 10 age groups, and the age groups are now in order from youngest to oldest.
+
+## 7. Remove columns we do not need
+
+We check the values in `analysis_date` and `jurisdiction`.
+
+```{r constant}
+table(df$analysis_date)
+table(df$jurisdiction)
+```
+
+Both columns have the same value in every row, so they do not tell us anything. We also do not need `start_date` and `end_date`, because `year` and `month` already tell us when the deaths happened. We remove these four columns.
+
+```{r drop}
+df$analysis_date <- NULL
+df$jurisdiction  <- NULL
+df$start_date    <- NULL
+df$end_date      <- NULL
+dim(df)
+```
+
+The data now has 20 columns.
+
+## 8. Remove the last few months
+
+The CDC made this data in October 2021, so the newest months may not be complete. The `ill_defined` column counts deaths with no clear cause. We check this number for each month of 2021.
+
+```{r ill_defined}
+for (m in 1:9) {
+  total <- sum(df$ill_defined[df$year == 2021 & df$month == m])
+  print(paste("2021, month", m, ":", total, "ill-defined deaths"))
+}
+```
+
+This number jumps after June 2021, likely because the cause of many recent deaths was not known yet. Because of this, we only keep January 2019 to June 2021.
+
+```{r cutoff}
+keep <- (df$year < 2021) | (df$month <= 6)
+df <- df[keep, ]
+table(df$year)
+```
+
+Now 2021 has 720 rows (6 months) instead of 1,080 (9 months).
+
+## 9. Check the data
+
+We count the missing values, and the rows where natural deaths are more than total deaths.
+
+```{r checks}
+sum(count_missing(df))
+sum(df$natural_cause > df$all_cause)
+```
+
+Both are 0, so there are no missing values and no impossible counts. Next, we count the rows in each month.
+
+```{r rows_per_month}
+table(df$year, df$month)
+```
+
+Each month has 120 rows (2 sexes x 6 race/ethnicity groups x 10 age groups), so no month is missing or repeated. Months after June 2021 show 0 because we removed them in Step 8.
+
+## 10. Save the clean data
+
+We save the clean data so the next file can use it.
+
+```{r save}
+df_clean <- df
+save(df_clean, file = "12_DataSaving.RData")
+dim(df_clean)
+```
+
+The clean data has 3,600 rows and 20 columns. It is saved as `12_DataSaving.RData`.
