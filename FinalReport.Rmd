@@ -38,4 +38,72 @@ The clean data has 3,600 rows and 20 columns.
 
 # Visualization
 
+```{r viz_setup}
+library(plot.matrix)
+source("02_funct_DataProcessing.R")
+source("03_funct_Plots.R")
+load("22_DataSaving.RData")
+```
+
+
+We first look at the total number of deaths in each month. The dashed red line is at March 2020, when the pandemic started.
+
+
+```{r viz_monthly}
+plot_monthly_deaths(df_proc, title = "Total deaths per month")
+```
+
+
+Before March 2020, there were between about 223,000 and 265,000 deaths per month. From March 2020 on, every month had more deaths than the same month of 2019, with peaks in April 2020, December 2020 and January 2021. This shows a large increase in deaths during the pandemic.
+
+
+Next, we compare the number of deaths per month before and during the pandemic.
+
+
+```{r viz_boxplot}
+plot_period_boxplot(df_proc, title = "Total deaths per month by period")
+totals <- monthly_totals(df_proc, "all_cause")
+summary(totals$deaths[totals$time_index < 15])
+summary(totals$deaths[totals$time_index >= 15])
+```
+
+
+The median number of deaths per month went from about 237,000 before the pandemic to about 276,000 during the pandemic.
+
+
+To answer our main question, we compare the percent change in deaths from 2019 to 2020 for each race/ethnicity group. Lighter colors mean a larger increase.
+
+
+```{r viz_race}
+plot_change_matrix(df_proc, c("all_cause", "alzheimer", "stroke"),
+                   c("All deaths", "Alzheimer", "Stroke"),
+                   "race_ethnicity", race_labels,
+                   "Percent change from 2019 to 2020 by race/ethnicity")
+```
+
+
+Deaths went up 44.8% for Hispanic people but 13.9% for White people. White people also had the smallest increase in Alzheimer's and stroke deaths. This supports the idea that the increase in deaths was different across race/ethnicity groups.
+
+
+We also check whether this gap is seen within each age group.
+
+
+```{r viz_race_age}
+plot_race_age_heatmap(df_proc, "all_cause",
+                      "Percent change in total deaths, 2019 to 2020")
+```
+
+
+The gap is seen in almost every age group. For example, Hispanic people aged 45 to 84 had increases of about 48% to 57%, while White people of the same ages had increases of about 11% to 16%. So the gap is not only explained by differences in age between the groups.
+
+
+More plots, including the changes by age group and by sex, are in `31_DataVisualization.Rmd`. For the rest of the project, we plan to add plots of:
+
+- the share of deaths from COVID-19 in each race/ethnicity group
+- deaths per month for each race/ethnicity group, to see when the increases happened
+
 # Analysis
+
+As of now, we have compared deaths with 2019 using percent changes. Next, we plan to fit a linear regression model for the number of deaths in each month and group. The model will include race/ethnicity, the month of the year (because deaths are higher in winter), and whether the month is during the pandemic. It will also include an interaction between the pandemic and race/ethnicity, which tests whether the increase during the pandemic was different for each group. We also plan to find the correlation between COVID-19 deaths and excess deaths from other causes in each month.
+
+Based on what we see from our results, we expect the increase in deaths to be larger for Hispanic, Black, Asian and American Indian people than for White people. We also expect COVID-19 deaths and excess deaths from other causes to go up at the same times.
