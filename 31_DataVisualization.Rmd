@@ -1,0 +1,105 @@
+---
+title: "31 - Data Visualization"
+output: html_document
+---
+
+## Purpose
+
+This file makes plots of the processed data and explains what they show.
+
+## 1. Load the package, our functions and the processed data
+
+We load the plot.matrix package for the heatmaps, our functions, and the processed data from the last file.
+
+```{r load}
+library(plot.matrix)
+source("02_funct_DataProcessing.R")
+source("03_funct_Plots.R")
+load("22_DataSaving.RData")
+dim(df_proc)
+```
+
+## 2. Deaths per month
+
+We plot the total number of deaths in each month. The dashed red line is at March 2020, when the pandemic started.
+
+```{r monthly}
+plot_monthly_deaths(df_proc, title = "Total deaths per month")
+```
+
+Before March 2020, there were between about 223,000 and 265,000 deaths per month. From March 2020 on, every month had more deaths than the same month of 2019. There are three peaks: April 2020 (about 322,000), December 2020 (about 367,000) and January 2021 (about 373,000).
+
+## 3. Deaths before and during the pandemic
+
+We compare the number of deaths per month before and during the pandemic, for all deaths and for Alzheimer's disease plus stroke.
+
+```{r boxplot_all}
+plot_period_boxplot(df_proc, title = "Total deaths per month by period")
+```
+
+```{r boxplot_neuro}
+plot_period_boxplot(df_proc, cause = "neuro_total",
+                    title = "Alzheimer's and stroke deaths per month by period")
+```
+
+We also find summary statistics for total deaths per month in each period.
+
+```{r summary_period}
+totals <- monthly_totals(df_proc, "all_cause")
+summary(totals$deaths[totals$time_index < 15])    ## Pre-pandemic
+summary(totals$deaths[totals$time_index >= 15])   ## Pandemic
+```
+
+The median number of deaths per month went from about 237,000 before the pandemic to about 276,000 during the pandemic. Alzheimer's and stroke deaths also went up, but by less: the median went from about 22,700 to 23,800 per month.
+
+## 4. Change by race/ethnicity
+
+We plot the percent change in deaths from 2019 to 2020 for each race/ethnicity group. Lighter colors mean a larger increase.
+
+```{r by_race}
+plot_change_matrix(df_proc, c("all_cause", "alzheimer", "stroke"),
+                   c("All deaths", "Alzheimer", "Stroke"),
+                   "race_ethnicity", race_labels,
+                   "Percent change from 2019 to 2020 by race/ethnicity")
+```
+
+Hispanic people had the largest increase in total deaths (44.8%), and White people had the smallest (13.9%). White people also had the smallest increase in Alzheimer's and stroke deaths.
+
+## 5. Change by age group
+
+We plot the percent change for total deaths and unnatural deaths in each age
+group.
+
+```{r by_age}
+plot_change_matrix(df_proc, c("all_cause", "unnatural"),
+                   c("All deaths", "Unnatural"),
+                   "age_group", age_labels,
+                   "Percent change from 2019 to 2020 by age group",
+                   flip = TRUE)
+```
+
+Total deaths went up the most for ages 25 to 44 (about 25%). Unnatural deaths went up about 23% for ages 15 to 44, but less than 3% for ages 75 and over. Deaths for children under 5 went down slightly (-5.7%).
+
+## 6. Change by sex
+
+We plot the percent change for males and females.
+
+```{r by_sex}
+plot_change_matrix(df_proc, c("all_cause", "alzheimer", "stroke", "unnatural"),
+                   c("All deaths", "Alzheimer", "Stroke", "Unnatural"),
+                   "sex", c("Female", "Male"),
+                   "Percent change from 2019 to 2020 by sex")
+```
+
+Total deaths went up more for males (20.4%) than for females (17.0%). Unnatural deaths also went up more for males (15.3% vs 9.9%), but Alzheimer's deaths went up more for females (11.3% vs 8.7%).
+
+## 7. Change by race/ethnicity and age group
+
+We plot the percent change in total deaths for each race/ethnicity group in each age group.
+
+```{r race_age}
+plot_race_age_heatmap(df_proc, "all_cause",
+                      "Percent change in total deaths, 2019 to 2020")
+```
+
+The gap between groups is seen in almost every age group. For example, Hispanic people aged 45 to 84 had increases of about 48% to 57%, while White people of the same ages had increases of about 11% to 16%. For children under 5, deaths went down in every group.
