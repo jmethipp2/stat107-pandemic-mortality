@@ -90,7 +90,7 @@ plot_change_matrix(df_proc, c("all_cause", "alzheimer", "stroke"),
 ```
 
 
-Deaths went up 44.8% for Hispanic people but 13.9% for White people. White people also had the smallest increase in Alzheimer's and stroke deaths. This supports the idea that the increase in deaths was different across race/ethnicity groups.
+The rows from top to bottom are Hispanic, American Indian, Asian, Black, White and Other. Deaths went up 44.8% for Hispanic people but 13.9% for White people. White people also had the smallest increase in Alzheimer's and stroke deaths. This supports the idea that the increase in deaths was different across race/ethnicity groups.
 
 
 We also check whether this gap is seen within each age group.
@@ -102,7 +102,7 @@ plot_race_age_heatmap(df_proc, "all_cause",
 ```
 
 
-The gap is seen in almost every age group. For example, Hispanic people aged 45 to 84 had increases of about 48% to 57%, while White people of the same ages had increases of about 11% to 16%. So the gap is not only explained by differences in age between the groups.
+The rows are in the same order as the last plot. The gap is seen in almost every age group. For example, Hispanic people aged 45 to 84 had increases of about 48% to 57%, while White people of the same ages had increases of about 11% to 16%. So the gap is not only explained by differences in age between the groups.
 
 
 More plots, including the changes by age group and by sex, are in `31_DataVisualization.Rmd`. For the rest of the project, we plan to add plots of:
