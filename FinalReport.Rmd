@@ -10,7 +10,7 @@ output: pdf_document
 
 The COVID-19 pandemic changed how many people died in the United States. Many people died from COVID-19 itself, but the pandemic may also have caused more deaths from other causes. For example, some people may have delayed medical care, and others faced more stress and isolation. If we only look at COVID-19 deaths, we could miss these effects.
 
-In this project, we do not study COVID-19 deaths directly. Instead, we compare the number of deaths during the pandemic with the same months of 2019, before the pandemic started. The increase in deaths is called excess deaths. We also look at which causes of death went up, such as Alzheimer's disease and stroke.
+In this project, we do not focus only on COVID-19 deaths. We compare the number of deaths during the pandemic with the same months of 2019, before the pandemic started. The increase in deaths is called excess deaths. We also look at which causes of death went up, such as Alzheimer's disease and stroke.
 
 The main question that we are focusing on is: compared with the same months of 2019, how much did U.S. deaths go up during the COVID-19 pandemic, and was the increase different across race/ethnicity groups? We also compare groups by age and sex.
 
@@ -19,6 +19,22 @@ Our goal is to test whether the increase in deaths was different across these gr
 # Executive Summary
 
 # Data
+
+Our data is "AH Monthly Provisional Counts of Deaths for Select Causes of Death by Sex, Age, and Race and Hispanic Origin" from the Centers for Disease Control and Prevention (CDC). We downloaded it from healthdata.gov, and the data is provided by the CDC through data.cdc.gov. It gives the number of deaths in the United States for each month from January 2019 to September 2021. The counts for 2019 are final, and the counts for 2020 and 2021 are provisional, which means they could still change.
+
+The raw data has 3,960 rows and 24 columns. Each row is one month for one group of people, by sex (2 groups), race/ethnicity (6 groups) and age group (10 groups). The columns give the total number of deaths, natural deaths, deaths from 11 groups of causes (such as heart disease, cancer, diabetes, Alzheimer's disease and stroke), and COVID-19 deaths. COVID-19 deaths are given in two columns: deaths where COVID-19 was the underlying cause, and deaths where it was one of multiple causes. We use the underlying cause. The data only gives counts of deaths and does not include population sizes.
+
+We cleaned the data in `11_DataCleaning.Rmd` with these steps:
+
+1. We gave the columns short names.
+2. We removed the commas from numbers above 999 and changed the death counts from text to numbers.
+3. We changed sex from "M" and "F" in 2019 to "Male" and "Female", so all years match.
+4. We made race/ethnicity a factor and age group an ordered factor.
+5. We removed four columns we do not need. `analysis_date` and `jurisdiction` have the same value in every row, and `year` and `month` already give the same information as `start_date` and `end_date`.
+6. We kept only January 2019 to June 2021. The CDC made this data in October 2021, and deaths with no clear cause went up sharply after June 2021, likely because the cause of many recent deaths was not known yet.
+7. We checked for missing values and impossible counts, and found none.
+
+The clean data has 3,600 rows and 20 columns.
 
 # Visualization
 
