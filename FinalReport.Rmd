@@ -20,6 +20,12 @@ Our goal is to test whether the increase in deaths was different across these gr
 
 # Executive Summary
 
+- Total deaths in the U.S. went up 18.8% in 2020 compared with 2019. Every month from March 2020 to June 2021 had more deaths than the same month of 2019.
+- The increase was much larger for Hispanic people (44.8%) than for White people (13.9%). The other race/ethnicity groups went up between 26% and 37%.
+- This gap is seen in almost every age group, so it is not only explained by differences in age between the groups.
+- Deaths from other causes also went up, such as diabetes (16.7%) and Alzheimer's disease (10.5%).
+- Younger adults (ages 15 to 44) had an increase of about 23% in deaths not from natural causes, compared with less than 3% for ages 75 and over.
+
 # Data
 
 Our data is "AH Monthly Provisional Counts of Deaths for Select Causes of Death by Sex, Age, and Race and Hispanic Origin" from the Centers for Disease Control and Prevention (CDC). We downloaded it from healthdata.gov, and the data is provided by the CDC through data.cdc.gov. It gives the number of deaths in the United States for each month from January 2019 to September 2021. The counts for 2019 are final, and the counts for 2020 and 2021 are provisional, which means they could still change.
@@ -109,3 +115,24 @@ More plots, including the changes by age group and by sex, are in `31_DataVisual
 As of now, we have compared deaths with 2019 using percent changes. Next, we plan to fit a linear regression model for the number of deaths in each month and group. The model will include race/ethnicity, the month of the year (because deaths are higher in winter), and whether the month is during the pandemic. It will also include an interaction between the pandemic and race/ethnicity, which tests whether the increase during the pandemic was different for each group. We also plan to find the correlation between COVID-19 deaths and excess deaths from other causes in each month.
 
 Based on what we see from our results, we expect the increase in deaths to be larger for Hispanic, Black, Asian and American Indian people than for White people. We also expect COVID-19 deaths and excess deaths from other causes to go up at the same times.
+
+# Summary of Individual Contribution
+
+**Julian Methippara**
+
+- Set up the GitHub repository.
+- Added the dataset and wrote `00_requirements.R`.
+- Wrote the data cleaning functions (`01_funct_DataCleaning.R`) and the data cleaning file (`11_DataCleaning.Rmd`).
+- Wrote the report's title, Abstract, Introduction and Data section.
+- Knitted the final report to PDF.
+
+**Jonathan Methippara**
+
+- Wrote the data processing functions (`02_funct_DataProcessing.R`) and the data processing file (`21_DataProcessing.Rmd`).
+- Wrote the plotting functions (`03_funct_Plots.R`) and the visualization file (`31_DataVisualization.Rmd`).
+- Wrote the report's Visualization and Analysis sections.
+
+**Jonathan Waddell**
+
+- Added the `README.md` file, with descriptions of each file and steps to reproduce the results.
+- Added the report's Executive Summary and this Summary of Individual Contribution.
