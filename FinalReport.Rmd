@@ -136,3 +136,8 @@ Based on what we see from our results, we expect the increase in deaths to be la
 
 - Added the `README.md` file, with descriptions of each file and steps to reproduce the results.
 - Added the report's Executive Summary and this Summary of Individual Contribution.
+
+# GitHub Repository
+
+**Link:**
+https://github.com/jmethipp2/stat107-pandemic-mortality.git
