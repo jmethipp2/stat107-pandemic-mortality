@@ -6,6 +6,8 @@ output: pdf_document
 
 # Abstract
 
+This project studies how deaths in the United States changed during the COVID-19 pandemic. Using monthly CDC death counts from January 2019 to June 2021, we compare deaths during the pandemic with the same months of 2019. Our main question is how much deaths went up, and whether the increase was different across race/ethnicity groups. We also compare groups by age and sex. So far, we found that total deaths went up 18.8% in 2020 compared with 2019. The increase was much larger for Hispanic people (44.8%) than for White people (13.9%), and this gap is seen in almost every age group. Deaths from other causes also went up, such as diabetes (16.7%) and Alzheimer's disease (10.5%). Younger adults had a large increase in deaths not from natural causes, such as injuries. Next, we plan to use a linear regression model to test whether the increase during the pandemic was different across race/ethnicity groups.
+
 # Introduction
 
 The COVID-19 pandemic changed how many people died in the United States. Many people died from COVID-19 itself, but the pandemic may also have caused more deaths from other causes. For example, some people may have delayed medical care, and others faced more stress and isolation. If we only look at COVID-19 deaths, we could miss these effects.
