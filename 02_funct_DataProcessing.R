@@ -1,16 +1,14 @@
 ## Functions for processing the data (used in 21_DataProcessing.Rmd).
 
 
-## The causes of death we use. covid_multiple is left out because it
-## overlaps with covid_underlying.
+## The causes of death we use. covid_multiple is left out because it overlaps with covid_underlying.
 cause_cols <- c("septicemia", "cancer", "diabetes", "alzheimer",
                 "flu_pneumonia", "chronic_lower_resp", "other_resp",
                 "kidney", "ill_defined", "heart", "stroke",
                 "covid_underlying")
 
 
-## Adds the new variables: unnatural, Dneuro_total, other_natural, period
-## and time_index.
+## Adds the new variables: unnatural, neuro_total, other_natural, period and time_index.
 ## Input: df, the clean data.
 ## Output: the data with the five new columns.
 add_derived_variables <- function(df) {
@@ -29,12 +27,9 @@ add_derived_variables <- function(df) {
 }
 
 
-## Compares deaths from one cause in a year with the same months of 2019,
-## for all rows or for each group of a factor.
-## Input: df, the data; cause, a death count column; group_var, a factor
-##   column or "none"; year, the year to compare; max_month, the last month.
-## Output: a table with deaths in 2019, deaths in the year, excess deaths
-##   and percent change for each group.
+## Compares deaths from one cause in a year with the same months of 2019, for all rows or for each group of a factor.
+## Input: df, the data; cause, a death count column; group_var, a factor column or "none"; year, the year to compare; max_month, the last month.
+## Output: a table with deaths in 2019, deaths in the year, excess deaths and percent change for each group.
 percent_change <- function(df, cause, group_var = "none", year = 2020,
                            max_month = 12) {
   df <- df[df$month <= max_month, ]
@@ -65,10 +60,8 @@ percent_change <- function(df, cause, group_var = "none", year = 2020,
 }
 
 
-## Runs percent_change() for several causes and keeps only the percent
-## changes.
-## Input: df, the data; causes, death count columns; group_var, year and
-##   max_month as in percent_change().
+## Runs percent_change() for several causes and keeps only the percent changes.
+## Input: df, the data; causes, death count columns; group_var, year and max_month as in percent_change().
 ## Output: a matrix of percent changes (rows = groups, columns = causes).
 percent_change_table <- function(df, causes, group_var = "none", year = 2020,
                                  max_month = 12) {
@@ -85,10 +78,8 @@ percent_change_table <- function(df, causes, group_var = "none", year = 2020,
 }
 
 
-## Adds up deaths from one cause for each month, for all rows or for one
-## group.
-## Input: df, the data; cause, a death count column; group_var, a factor
-##   column or "none"; level, the group to keep (e.g. "Hispanic").
+## Adds up deaths from one cause for each month, for all rows or for one group.
+## Input: df, the data; cause, a death count column; group_var, a factor column or "none"; level, the group to keep (e.g. "Hispanic").
 ## Output: a table with time_index, year, month and deaths.
 monthly_totals <- function(df, cause, group_var = "none", level = "none") {
   if (group_var != "none") {
