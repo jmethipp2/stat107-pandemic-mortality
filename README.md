@@ -20,6 +20,18 @@
 - `FinalReport.Rmd`: our report.
 - `FinalReport.pdf`: the knitted report.
 
+## Figures
+
+All figures are made with the plot functions in `03_funct_Plots.R`.
+
+- `31_DataVisualization.Rmd` makes all 7 figures: deaths per month, two
+  boxplots of deaths per month by period (all deaths, and Alzheimer's and
+  stroke deaths), and heatmaps of the percent change in deaths by
+  race/ethnicity, by age group, by sex, and by race/ethnicity and age group.
+- `FinalReport.Rmd` makes 4 of these figures when it is knitted: deaths per
+  month, the boxplot of all deaths, the race/ethnicity heatmap, and the
+  race/ethnicity and age group heatmap.
+
 ## How to reproduce our results
 
 1. Download this repository and keep all files in the same folder, with the
